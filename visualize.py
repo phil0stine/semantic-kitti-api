@@ -19,7 +19,7 @@ if __name__ == '__main__':
       '--config', '-c',
       type=str,
       required=False,
-      default="config/semantic-kitti.yaml",
+      default="config/rellis.yaml",
       help='Dataset config file. Defaults to %(default)s',
   )
   parser.add_argument(
@@ -96,11 +96,11 @@ if __name__ == '__main__':
     quit()
 
   # fix sequence name
-  FLAGS.sequence = '{0:02d}'.format(int(FLAGS.sequence))
+  FLAGS.sequence = '{0:05d}'.format(int(FLAGS.sequence))
 
   # does sequence folder exist?
-  scan_paths = os.path.join(FLAGS.dataset, "sequences",
-                            FLAGS.sequence, "velodyne")
+  scan_paths = os.path.join(FLAGS.dataset, 
+                            FLAGS.sequence, "os1_cloud_node_kitti_bin")
   if os.path.isdir(scan_paths):
     print("Sequence folder exists! Using sequence from %s" % scan_paths)
   else:
@@ -115,11 +115,11 @@ if __name__ == '__main__':
   # does sequence folder exist?
   if not FLAGS.ignore_semantics:
     if FLAGS.predictions is not None:
-      label_paths = os.path.join(FLAGS.predictions, "sequences",
+      label_paths = os.path.join(FLAGS.predictions, 
                                  FLAGS.sequence, "predictions")
     else:
-      label_paths = os.path.join(FLAGS.dataset, "sequences",
-                                 FLAGS.sequence, "labels")
+      label_paths = os.path.join(FLAGS.dataset, 
+                                 FLAGS.sequence, "os1_cloud_node_semantickitti_label_id")
     if os.path.isdir(label_paths):
       print("Labels folder exists! Using labels from %s" % label_paths)
     else:
