@@ -95,12 +95,18 @@ if __name__ == '__main__':
     print("Error opening yaml file.")
     quit()
 
+  rellis = 'rellis' in FLAGS.dataset.lower()
+
   # fix sequence name
-  FLAGS.sequence = '{0:05d}'.format(int(FLAGS.sequence))
+  FLAGS.sequence = '{0:05d}'.format(int(FLAGS.sequence)) if rellis else '{0:02d}'.format(int(FLAGS.sequence))
 
   # does sequence folder exist?
-  scan_paths = os.path.join(FLAGS.dataset, 
-                            FLAGS.sequence, "os1_cloud_node_kitti_bin")
+  if rellis:
+    scan_paths = os.path.join(FLAGS.dataset, 
+                              FLAGS.sequence, "os1_cloud_node_kitti_bin")
+  else:
+    scan_paths = os.path.join(FLAGS.dataset, "sequences",
+                              FLAGS.sequence, "velodyne")
   if os.path.isdir(scan_paths):
     print("Sequence folder exists! Using sequence from %s" % scan_paths)
   else:
@@ -115,11 +121,19 @@ if __name__ == '__main__':
   # does sequence folder exist?
   if not FLAGS.ignore_semantics:
     if FLAGS.predictions is not None:
-      label_paths = os.path.join(FLAGS.predictions, 
-                                 FLAGS.sequence, "predictions")
+      if rellis:
+        label_paths = os.path.join(FLAGS.predictions,
+                                   FLAGS.sequence, "predictions")
+      else:
+        label_paths = os.path.join(FLAGS.predictions, "sequences",
+                                   FLAGS.sequence, "predictions")
     else:
-      label_paths = os.path.join(FLAGS.dataset, 
-                                 FLAGS.sequence, "os1_cloud_node_semantickitti_label_id")
+      if rellis:
+        label_paths = os.path.join(FLAGS.dataset, 
+                                  FLAGS.sequence, "os1_cloud_node_semantickitti_label_id")
+      else:
+        label_paths = os.path.join(FLAGS.dataset, "sequences",
+                                   FLAGS.sequence, "labels")
     if os.path.isdir(label_paths):
       print("Labels folder exists! Using labels from %s" % label_paths)
     else:
